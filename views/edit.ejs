@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>CRUD com NodeJS - Express - MongoDB</title>
+    </head>
+    <body>
+
+        <h2>Editar Registros</h2>
+        <% data.forEach(function(details) { %>
+            <form action="/edit/<%= details._id %>" method="POST">
+                <input type="text" value="<%= details.name %>" name="name">
+                <input type="text" value="<%= details.surname %>" name="surname">
+              
+                <button type="submit">Editar</button>
+            </form>
+           
+            
+        <% }) %>
+        <button><a href="/show">Todos</a></button>
+    </body>
+</html>
