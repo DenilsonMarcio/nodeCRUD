@@ -8,7 +8,8 @@
 
         <h2>Editar Registros</h2>
         <% data.forEach(function(details) { %>
-            <form action="/edit/<%= details._id %>" method="POST">
+            <form action="/edit/<%= details.cpf %>" method="POST">
+                <input type="text" value="<%= details.cpf %>" name="cpf">
                 <input type="text" value="<%= details.name %>" name="name">
                 <input type="text" value="<%= details.surname %>" name="surname">
               

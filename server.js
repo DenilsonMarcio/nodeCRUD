@@ -3,15 +3,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const { ResumeToken, ObjectID, ObjectId } = require('mongodb');
 const MongoClient = require('mongodb') .MongoClient
-
-const uri = "mongodb+srv://livsundev:livsundev@cluster0-ehqwz.mongodb.net/dbNodeCrud?retryWrites=true&w=majority"
+const key = '859c80f3-464b-4a3e-82a2-2db504fffc28'
+const uri = 'mongodb+srv://livsundev:livsundev@cluster0-ehqwz.mongodb.net/dbTest?retryWrites=true&w=majority'
 
 //Conexão com o MongoDB
 
 MongoClient.connect(uri, (err, client) => {
     
     if (err) return console.log(err)
-    db = client.db('dbNodeCrud') //nome do banco de dados criado no Mongo
+    db = client.db('dbTest') //nome do banco de dados criado no Mongo
 
     //faz a comunicação do servidor com o navegador
     app.listen(3000, function(){
@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 app.set('view engine','ejs');
 
 
-//Metodo GET
+//Metodo GET - SELECT
 app.get('/show', (req, res) => {
     db.collection('data').find().toArray((err, result) => {
         if (err) return console.log(err)
@@ -40,7 +40,7 @@ app.get('/show', (req, res) => {
     })
 })
 
-//Metodo POST
+//Metodo POST - INSERT
 app.post('/show', (req, res) => {
     db.collection('data').save(req.body, (err, result) => {
         if (err) return console.log(err)
@@ -51,7 +51,7 @@ app.post('/show', (req, res) => {
     })
 })
 
-//Rotas GET e POST
+//Rotas GET e POST - UPDATE
 app.route('/edit/:id')
 
 .get((req, res) => {
@@ -64,11 +64,11 @@ app.route('/edit/:id')
 })
 
 .post((req, res) => {
-    var id = req.param.id
+    var cpf = req.param.id
     var name = req.body.name
     var surname = req.body.surname
 
-    db.collection('data').updateOne({_id: ObjectId(id)}, {
+    db.collection('data').updateOne({id: cpf}, {
         $set: {
             name: name,
             surname: surname
@@ -81,7 +81,7 @@ app.route('/edit/:id')
 })
 
 //Rotas para EDITAR
-app.route('/edit/:id')
+/*app.route('/edit/:id')
 .get((req, res) => {
     var id = req.param.id;
 
@@ -105,13 +105,13 @@ app.route('/edit/:id')
         res.redirect('/show')
         console.log('Atualizado no Banco de Dados')
     })
-})
+})*/
 //Rota para DELETE
 app.route('/delete/:id')
 .get((req, res) => {
-    var id = req.param.id
+    var cpf = req.param.id
 
-    db.collection('data').deleteOne({_id: ObjectId(id)}, (err, result) => {
+    db.collection('data').deleteOne({id: cpf}, (err, result) => {
         if (err) return res.send(500, err)
         console.log('Deletado do Banco de Dados')
         res.redirect('/show')
