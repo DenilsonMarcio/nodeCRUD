@@ -2,9 +2,15 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const { ResumeToken, ObjectID, ObjectId } = require('mongodb');
-const MongoClient = require('mongodb') .MongoClient
-const key = '859c80f3-464b-4a3e-82a2-2db504fffc28'
-const uri = 'mongodb+srv://livsundev:livsundev@cluster0-ehqwz.mongodb.net/dbTest?retryWrites=true&w=majority'
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://livsundev:livsundev@cluster0-ehqwz.mongodb.net/<dbTest>?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useUnifiedTopology: true});
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
 
 //Conexão com o MongoDB
 
@@ -16,6 +22,7 @@ MongoClient.connect(uri, (err, client) => {
     //faz a comunicação do servidor com o navegador
     app.listen(3000, function(){
         console.log('Server running on port 3000');
+        console.log('Clique o link para abrir o navegador => http://localhost:3000');
     })
 })
 
@@ -42,7 +49,7 @@ app.get('/show', (req, res) => {
 
 //Metodo POST - INSERT
 app.post('/show', (req, res) => {
-    db.collection('data').save(req.body, (err, result) => {
+    db.collection('data').insertOne(req.body, (err, result) => {
         if (err) return console.log(err)
 
         console.log('Salvo no banco de dados')
